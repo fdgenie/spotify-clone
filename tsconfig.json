@@ -33,6 +33,7 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "**/src/**/*",
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"

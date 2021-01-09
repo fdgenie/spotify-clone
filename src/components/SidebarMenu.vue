@@ -1,6 +1,6 @@
 <template>
   <!-- <aside class="relative h-full w-72 bg-black text-white text-left"> -->
-  <div class="absolute inset-y-0 left-0 w-11/12 pl-4">
+  <div class="border-r flex-grow px-4">
     <div class="pt-6">
       LOGO
     </div>
