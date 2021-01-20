@@ -1,11 +1,26 @@
+import { hasTokenExpired, setAccessToken } from "@/utils/cookiesUtils";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import MainScreenPage from "@/views/MainScreenPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "MainScreenPage",
-    component: MainScreenPage
+    // component: MainScreenPage
+    component: () =>
+      import(
+        /* webpackChunkName: "mainScreenPage" */ "@/views/MainScreenPage.vue"
+      )
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
+  },
+  {
+    path: "/library",
+    name: "LibraryPage",
+    component: () =>
+      import(/* webpackChunkName: "library" */ "@/views/LibraryPage.vue")
   }
   // {
   //   path: "/about",
@@ -21,6 +36,20 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (setAccessToken() && !hasTokenExpired()) {
+    next();
+    return;
+  } else {
+    //TODO refresh token
+  }
+  if (to.path !== "/login") {
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;

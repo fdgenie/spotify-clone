@@ -12,7 +12,7 @@
         <router-link to="/">Search</router-link>
       </div>
       <div class="pt-4">
-        <router-link to="/">Library</router-link>
+        <router-link to="/library">Library</router-link>
       </div>
     </div>
     <div class="pt-8">
