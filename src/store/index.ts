@@ -67,7 +67,7 @@ export default createStore({
   },
   actions: {
     login() {
-      window.location.href = "https://spotify-clone-server.netlify.app/";
+      window.location.href = "https://spotify-clone-server.netlify.app/.netlify/functions/api";
     },
     currentUser({ commit }) {
       axiosInstance
