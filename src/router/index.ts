@@ -1,4 +1,8 @@
-import { hasTokenExpired, setAccessToken } from "@/utils/cookiesUtils";
+import {
+  getAccessToken,
+  hasTokenExpired,
+  refreshToken
+} from "@/utils/cookiesUtils";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
@@ -17,10 +21,16 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
   },
   {
-    path: "/library",
-    name: "LibraryPage",
+    path: "/artists",
+    name: "ArtistsPage",
     component: () =>
-      import(/* webpackChunkName: "library" */ "@/views/LibraryPage.vue")
+      import(/* webpackChunkName: "artists" */ "@/views/ArtistsPage.vue")
+  },
+  {
+    path: "/tracks",
+    name: "TracksPage",
+    component: () =>
+      import(/* webpackChunkName: "tracks" */ "@/views/TracksPage.vue")
   }
   // {
   //   path: "/about",
@@ -39,11 +49,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (setAccessToken() && !hasTokenExpired()) {
+  if (getAccessToken() && !hasTokenExpired()) {
     next();
-    return;
   } else {
-    //TODO refresh token
+    refreshToken();
   }
   if (to.path !== "/login") {
     next("/login");

@@ -1,30 +1,21 @@
 <template>
-  <!-- <div class="grid grid-cols-6 grid-rows-6 h-screen grid-flow-row-dense">
+  <div class="h-screen grid grid-cols-12">
     <aside
-      class="relative col-span-1 row-span-5 h-auto bg-black text-white text-left"
+      class="relative md:col-span-2 col-span-4 bg-black text-white text-left px-4"
     >
       <SidebarMenu />
     </aside>
-    <main class="md:col-span-5 md:row-span-5 col-span-6 row-span-6">
-      test
-    </main>
-    <footer class="col-span-6 bg-gray-700">
-      <PlaylistFooter />
-    </footer>
-  </div> -->
-  <div class="h-screen grid grid-cols-12">
-    <aside class="relative col-span-2 bg-black text-white text-left">
-      <SidebarMenu />
-    </aside>
+
     <main
       style="background-color: #121212"
-      class="col-span-10 bg-gray-700 text-white"
+      class="md:col-span-10 col-span-8 bg-gray-700 text-white overflow-y-auto"
     >
-      <MainScreenHome />
+      <MainScreen />
     </main>
+
     <footer
       style="background-color: #282828"
-      class="col-span-12 h-auto absolute inset-x-0 bottom-0"
+      class="col-span-12 inset-x-0 bottom-0"
     >
       <PlaylistFooter />
     </footer>
@@ -35,14 +26,17 @@
 import { defineComponent } from "vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import PlaylistFooter from "@/components/PlaylistFooter.vue";
-import MainScreenHome from "@/components/MainScreenHome.vue";
+import MainScreen from "@/components/MainScreen.vue";
 
 export default defineComponent({
   name: "MainScreenPage",
   components: {
     SidebarMenu,
     PlaylistFooter,
-    MainScreenHome
+    MainScreen
+  },
+  setup() {
+    return {};
   }
 });
 </script>
