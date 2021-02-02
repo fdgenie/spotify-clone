@@ -67,9 +67,9 @@ export default createStore({
   },
   actions: {
     login() {
-      if (process.env.NODE_ENV === "dev") {
+      if (process.env.NODE_ENV === "development") {
         window.location.href = "http://localhost:9000/.netlify/functions/api";
-      } else if (process.env.NODE_ENV === "prod") {
+      } else if (process.env.NODE_ENV === "production") {
         window.location.href =
           "http://spotify-clone-server.netlify.app/.netlify/functions/api";
       }
