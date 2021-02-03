@@ -5,13 +5,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
+import { getAccessToken, hasTokenExpired } from "./utils/cookiesUtils";
 
 export default defineComponent({
   name: "App",
   setup() {
     const store = useStore();
 
-    store.dispatch("currentUser");
+    if (getAccessToken() && !hasTokenExpired()) {
+      store.dispatch("currentUser");
+    }
     return {};
   }
 });
