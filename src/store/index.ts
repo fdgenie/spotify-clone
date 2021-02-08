@@ -75,8 +75,13 @@ export default createStore({
       }
     },
     currentUser({ commit }) {
+      // axiosInstance({
+      //   method: "POST",
+      //   url: "/user",
+      //   data: JSON.stringify({ cookie: getAccessToken() })
+      // });
       axiosInstance
-        .post("/user", { cookie: getAccessToken() })
+        .post("/user", JSON.stringify({ cookie: getAccessToken() }))
         .then(response => {
           commit("setUser", response.data);
         })
@@ -91,10 +96,10 @@ export default createStore({
       commit("setLoading", true);
 
       axiosInstance
-        .post("/playlists", {
-          cookie: getAccessToken(),
-          userInfo: state.userInfo
-        })
+        .post(
+          "/playlists",
+          JSON.stringify({ cookie: getAccessToken(), userInfo: state.userInfo })
+        )
         .then(response => {
           commit("setPlaylists", response.data);
         })
@@ -112,7 +117,7 @@ export default createStore({
       commit("setLoading", true);
 
       axiosInstance
-        .post("/recentlyPlayed", { cookie: getAccessToken() })
+        .post("/recentlyPlayed", JSON.stringify({ cookie: getAccessToken() }))
         .then(response => {
           commit("setRecentlyPlayed", response.data);
         })
@@ -130,7 +135,10 @@ export default createStore({
       commit("setLoading", true);
 
       axiosInstance
-        .post("/topArtists", { cookie: getAccessToken(), limit })
+        .post(
+          "/topArtists",
+          JSON.stringify({ cookie: getAccessToken(), limit })
+        )
         .then(response => {
           commit("setTopArtists", response.data);
         })
@@ -148,7 +156,7 @@ export default createStore({
       commit("setLoading", true);
 
       axiosInstance
-        .post("/topTracks", { cookie: getAccessToken(), limit })
+        .post("/topTracks", JSON.stringify({ cookie: getAccessToken(), limit }))
         .then(response => {
           commit("setTopTracks", response.data);
         })
