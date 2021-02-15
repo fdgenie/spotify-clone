@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { axiosInstance } from "@/boot/axios";
 import { createStore } from "vuex";
 import { getAccessToken } from "@/utils/cookiesUtils";
+import axios from "axios";
+import querystring from "query-string";
 
 export default createStore({
   state: {
@@ -67,21 +70,49 @@ export default createStore({
   },
   actions: {
     login() {
-      if (process.env.NODE_ENV === "development") {
-        window.location.href = "http://localhost:9000/.netlify/functions/api";
-      } else if (process.env.NODE_ENV === "production") {
-        window.location.href =
-          "http://spotify-clone-server.netlify.app/.netlify/functions/api";
-      }
+      const authEndpoint = "https://accounts.spotify.com/authorize";
+      const clientId = process.env.VUE_APP_SPOTIFY_CLIENT;
+      const redirectUri = process.env.VUE_APP_REDIRECT_URI_AUTHORIZE;
+      const scopes = [
+        "user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private"
+      ];
+
+      window.location.href = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+        "%20"
+      )}&response_type=code`;
+    },
+    callback({ commit }, code) {
+      axios({
+        method: "post",
+        url: "https://accounts.spotify.com/api/token",
+        headers: {
+          Authorization: `Basic ${process.env.VUE_APP_SPOTIFY_CLIENT_64}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: querystring.stringify({
+          grant_type: "authorization_code",
+          redirect_uri: process.env.VUE_APP_REDIRECT_URI,
+          code
+        })
+      })
+        .then(response => {
+          document.cookie = `access_token=${response.data.access_token}; path=/`;
+          document.cookie = `expires_in=${response.data.expires_in};  path=/`;
+          document.cookie = `refresh_token=${response.data.refresh_token};  path=/`;
+          document.cookie = `date_now=${Date.now()};  path=/`;
+          window.location.href = process.env.VUE_APP_REDIRECT_URI;
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 422) {
+            console.log(error);
+            return;
+          }
+          throw error;
+        });
     },
     currentUser({ commit }) {
-      // axiosInstance({
-      //   method: "POST",
-      //   url: "/user",
-      //   data: JSON.stringify({ cookie: getAccessToken() })
-      // });
       axiosInstance
-        .post("/user", JSON.stringify({ cookie: getAccessToken() }))
+        .post("/user", JSON.stringify({ access_token: getAccessToken() }))
         .then(response => {
           commit("setUser", response.data);
         })

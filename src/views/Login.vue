@@ -8,7 +8,9 @@
         class="h-10 w-40 border-2 border-gray-500 hover:text-green-400"
         @click="login"
       >
+        <!-- <a href="http://localhost:9000/.netlify/functions/api"> -->
         Login to Spotify
+        <!-- </a> -->
       </button>
     </div>
   </div>
@@ -22,6 +24,13 @@ export default defineComponent({
   name: "Login",
   setup() {
     const store = useStore();
+
+    console.log(window.location.href);
+    if (window.location.href.includes("code=")) {
+      const code = window.location.href.split("code=")[1].split("#/login")[0];
+      store.dispatch("callback", code);
+    }
+
     const login = async () => {
       await store.dispatch("login");
     };

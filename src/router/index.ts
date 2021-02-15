@@ -4,7 +4,12 @@ import {
   refreshToken,
   getRefreshToken
 } from "@/utils/cookiesUtils";
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteRecordRaw,
+  useRoute
+} from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -20,6 +25,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/login",
     name: "Login",
     component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
+  },
+  {
+    path: "/callback",
+    name: "Callback",
+    component: () =>
+      import(/* webpackChunkName: "callback" */ "@/views/Callback.vue")
   },
   {
     path: "/artists",
@@ -50,6 +61,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  console.log(getAccessToken());
   if (getAccessToken() && !hasTokenExpired()) {
     next();
   } else if (getRefreshToken()) {
