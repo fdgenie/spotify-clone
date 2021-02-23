@@ -24,8 +24,6 @@ export default defineComponent({
   name: "Login",
   setup() {
     const store = useStore();
-
-    console.log(window.location.href);
     if (window.location.href.includes("code=")) {
       const code = window.location.href.split("code=")[1].split("#/login")[0];
       store.dispatch("callback", code);

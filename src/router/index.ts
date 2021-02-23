@@ -4,12 +4,7 @@ import {
   refreshToken,
   getRefreshToken
 } from "@/utils/cookiesUtils";
-import {
-  createRouter,
-  createWebHashHistory,
-  RouteRecordRaw,
-  useRoute
-} from "vue-router";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,12 +22,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
   },
   {
-    path: "/callback",
-    name: "Callback",
-    component: () =>
-      import(/* webpackChunkName: "callback" */ "@/views/Callback.vue")
-  },
-  {
     path: "/artists",
     name: "ArtistsPage",
     component: () =>
@@ -44,15 +33,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "tracks" */ "@/views/TracksPage.vue")
   }
-  // {
-  //   path: "/about",
-  //   name: "About",
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/About.vue")
-  // }
 ];
 
 const router = createRouter({
@@ -61,7 +41,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(getAccessToken());
   if (getAccessToken() && !hasTokenExpired()) {
     next();
   } else if (getRefreshToken()) {

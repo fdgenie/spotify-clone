@@ -30,8 +30,6 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    store.dispatch("playlists");
-
     const playlists = computed(() => store.getters.getPlaylists);
 
     const changeCurrentScreen = (screen: string) => {

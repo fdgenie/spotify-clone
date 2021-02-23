@@ -81,7 +81,7 @@ export default createStore({
         "%20"
       )}&response_type=code`;
     },
-    callback({ commit }, code) {
+    callback(_, code) {
       axios({
         method: "post",
         url: "https://accounts.spotify.com/api/token",
@@ -110,11 +110,17 @@ export default createStore({
           throw error;
         });
     },
-    currentUser({ commit }) {
-      axiosInstance
-        .post("/user", JSON.stringify({ access_token: getAccessToken() }))
+    currentUser({ dispatch, commit }) {
+      axiosInstance({
+        method: "get",
+        url: "me",
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => {
           commit("setUser", response.data);
+          dispatch("playlists", response.data.id);
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {
@@ -123,16 +129,18 @@ export default createStore({
           throw error;
         });
     },
-    playlists({ commit, state }) {
+    playlists({ commit }, userId) {
       commit("setLoading", true);
 
-      axiosInstance
-        .post(
-          "/playlists",
-          JSON.stringify({ cookie: getAccessToken(), userInfo: state.userInfo })
-        )
+      axiosInstance({
+        method: "get",
+        url: `users/${userId}/playlists?limit=8`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => {
-          commit("setPlaylists", response.data);
+          commit("setPlaylists", response.data.items);
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {
@@ -147,10 +155,15 @@ export default createStore({
     recentlyPlayed({ commit }) {
       commit("setLoading", true);
 
-      axiosInstance
-        .post("/recentlyPlayed", JSON.stringify({ cookie: getAccessToken() }))
+      axiosInstance({
+        method: "get",
+        url: "me/player/recently-played?limit=6",
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => {
-          commit("setRecentlyPlayed", response.data);
+          commit("setRecentlyPlayed", response.data.items);
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {
@@ -165,13 +178,15 @@ export default createStore({
     topArtists({ commit }, { limit }) {
       commit("setLoading", true);
 
-      axiosInstance
-        .post(
-          "/topArtists",
-          JSON.stringify({ cookie: getAccessToken(), limit })
-        )
+      axiosInstance({
+        method: "get",
+        url: `me/top/artists?limit=${limit}`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => {
-          commit("setTopArtists", response.data);
+          commit("setTopArtists", response.data.items);
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {
@@ -186,10 +201,15 @@ export default createStore({
     topTracks({ commit }, { limit }) {
       commit("setLoading", true);
 
-      axiosInstance
-        .post("/topTracks", JSON.stringify({ cookie: getAccessToken(), limit }))
+      axiosInstance({
+        method: "get",
+        url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => {
-          commit("setTopTracks", response.data);
+          commit("setTopTracks", response.data.items);
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {

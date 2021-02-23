@@ -27,6 +27,7 @@ export const getDateNowToken = () => {
 };
 
 export const hasTokenExpired = () => {
+  console.log(Date.now() - Number(getDateNowToken()));
   return Date.now() - Number(getDateNowToken()) > 3600 * 1000;
 };
 
