@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { axiosInstance } from "@/boot/axios";
 import { createStore } from "vuex";
-import { getAccessToken } from "@/utils/cookiesUtils";
+import { getAccessToken, getRefreshToken } from "@/utils/cookiesUtils";
 import axios from "axios";
 import querystring from "query-string";
 
@@ -99,6 +99,35 @@ export default createStore({
           document.cookie = `access_token=${response.data.access_token}; path=/`;
           document.cookie = `expires_in=${response.data.expires_in};  path=/`;
           document.cookie = `refresh_token=${response.data.refresh_token};  path=/`;
+          document.cookie = `date_now=${Date.now()};  path=/`;
+          window.location.href = process.env.VUE_APP_REDIRECT_URI;
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 422) {
+            console.log(error);
+            return;
+          }
+          throw error;
+        });
+    },
+    dispathRefreshToken() {
+      axios({
+        method: "post",
+        url: "https://accounts.spotify.com/api/token",
+        headers: {
+          Authorization: `Basic ${process.env.VUE_APP_SPOTIFY_CLIENT_64}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: querystring.stringify({
+          grant_type: "refresh_token",
+          refresh_token: getRefreshToken()
+        })
+      })
+        .then(response => {
+          console.log(response);
+          document.cookie = `access_token=${response.data.access_token}; path=/`;
+          document.cookie = `expires_in=${response.data.expires_in};  path=/`;
+          document.cookie = `refresh_token=${getRefreshToken()};  path=/`;
           document.cookie = `date_now=${Date.now()};  path=/`;
           window.location.href = process.env.VUE_APP_REDIRECT_URI;
         })

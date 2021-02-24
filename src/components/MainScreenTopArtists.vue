@@ -1,16 +1,19 @@
 <template>
-  <div class="ml-8 m-4 text-left">
-    <div class="text-xl">
+  <div class="ml-8 m-4 text-left font-semibold">
+    <div class="text-3xl">
       Your Top Artists
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-4 gap-3 mt-5" v-if="!loading">
+    <div
+      class="grid grid-cols-3 lg:grid-cols-4 gap-3 mt-5 justify-items-center"
+      v-if="!loading"
+    >
       <div
         v-for="topArtist in topArtists"
         :key="topArtist.id"
         class="text-left mr-5 mt-5 text-white w-100 flex"
       >
-        <div>
-          <div class="mb-2 text-2xl">
+        <div class="box-border p-2">
+          <div class="mb-2 col-span-1">
             <img
               class="w-60 rounded-full h-60"
               :src="topArtist.images[0].url"

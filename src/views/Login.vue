@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts">
+import { getRefreshToken } from "@/utils/cookiesUtils";
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
 
@@ -24,7 +25,10 @@ export default defineComponent({
   name: "Login",
   setup() {
     const store = useStore();
-    if (window.location.href.includes("code=")) {
+
+    if (getRefreshToken()) {
+      store.dispatch("dispathRefreshToken");
+    } else if (window.location.href.includes("code=")) {
       const code = window.location.href.split("code=")[1].split("#/login")[0];
       store.dispatch("callback", code);
     }

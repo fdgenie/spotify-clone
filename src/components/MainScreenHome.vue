@@ -1,18 +1,21 @@
 <template>
-  <div class="ml-8 m-4 text-left">
-    <div class="text-xl">
+  <div class="ml-8 m-4 text-left font-semibold">
+    <div class="text-3xl">
       Your Top Artists
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-6" v-if="!loading">
+    <div
+      class="grid grid-cols-3 lg:grid-cols-6 justify-items-center"
+      v-if="!loading"
+    >
       <div
         v-for="topArtist in topArtists"
         :key="topArtist.id"
-        class="text-left mr-5 mt-5 text-white w-100 flex"
+        class="text-left mr-5 mt-5 text-white w-100"
       >
-        <div>
-          <div class="mb-2 text-2xl col-span-1">
+        <div class="box-border p-2">
+          <div class="mb-2 col-span-1">
             <img
-              class="w-40 rounded-full h-40"
+              class="w-40 rounded-full h-40 m-auto"
               :src="topArtist.images[0].url"
               alt=""
             />
@@ -27,18 +30,24 @@
       <img src="@/assets/loading_spinner.png" alt="" />
     </div>
   </div>
-  <div class="ml-8 m-4 text-left">
-    <div class="text-xl">
+  <div class="ml-8 m-4 text-left font-semibold">
+    <div class="text-3xl">
       Your Top Tracks
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-6" v-if="!loading">
+    <div
+      class="grid grid-cols-3 lg:grid-cols-6 gap-3 justify-items-center"
+      v-if="!loading"
+    >
       <div
         v-for="topTrack in topTracks"
         :key="topTrack.id"
         class="text-left mr-5 mt-5 text-white flex"
       >
-        <div @click="playSong(topTrack)" class="cursor-pointer">
-          <div class="mb-2 text-2xl">
+        <div
+          @click="playSong(topTrack)"
+          class="cursor-pointer box-border p-2 bg-cards-background hover:bg-cards-background-hover"
+        >
+          <div class="mb-2">
             <img :src="topTrack.album.images[0].url" alt="" />
           </div>
           <div>
@@ -51,18 +60,24 @@
       <img src="@/assets/loading_spinner.png" alt="" />
     </div>
   </div>
-  <div class="ml-8 m-4 text-left">
-    <div class="text-xl">
+  <div class="ml-8 m-4 text-left font-semibold">
+    <div class="text-3xl">
       Recent Played
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-6" v-if="!loading">
+    <div
+      class="grid grid-cols-3 lg:grid-cols-6 gap-3 justify-items-center"
+      v-if="!loading"
+    >
       <div
         v-for="recentlyPlayed in recentlyPlayed"
         :key="recentlyPlayed.track.id"
         class="text-left mr-5 mt-5 text-white flex"
       >
-        <div @click="playSong(recentlyPlayed.track)" class="cursor-pointer">
-          <div class="mb-2 text-2xl">
+        <div
+          @click="playSong(recentlyPlayed.track)"
+          class="cursor-pointer box-border p-2 bg-cards-background hover:bg-cards-background-hover"
+        >
+          <div class="mb-2 ">
             <img :src="recentlyPlayed.track.album.images[0].url" alt="" />
           </div>
           <div>

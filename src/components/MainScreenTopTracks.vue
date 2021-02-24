@@ -1,16 +1,22 @@
 <template>
-  <div class="ml-8 m-4 text-left">
-    <div class="text-xl">
+  <div class="ml-8 m-4 text-left font-semibold">
+    <div class="text-3xl">
       Your Top Tracks
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-4 gap-3 mt-5" v-if="!loading">
+    <div
+      class="grid grid-cols-3 lg:grid-cols-4 gap-3 mt-5 justify-items-center"
+      v-if="!loading"
+    >
       <div
         v-for="topTrack in topTracks"
         :key="topTrack.id"
         class="text-left mr-5 mt-5 text-white flex"
       >
-        <div @click="playSong(topTrack)" class="cursor-pointer">
-          <div class="mb-2 text-2xl">
+        <div
+          @click="playSong(topTrack)"
+          class="cursor-pointer box-border p-2 bg-cards-background hover:bg-cards-background-hover"
+        >
+          <div class="mb-2 col-span-1">
             <img class="w-60 h-60" :src="topTrack.album.images[0].url" alt="" />
           </div>
           <div>

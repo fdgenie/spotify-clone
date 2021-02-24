@@ -1,27 +1,51 @@
 <template>
-  <div class="pt-8">
-    <div>
-      <button class="outline-none" @click="changeCurrentScreen('Home')">
+  <div class="flex flex-col">
+    <div class="pt-5">
+      <button
+        class="focus:outline-none focus:underline focus:text-gray-300"
+        @click="changeCurrentScreen('Home')"
+      >
         Home
       </button>
+      <div class="pt-2">
+        <button
+          class="focus:outline-none focus:underline focus:text-gray-300"
+          @click="changeCurrentScreen('TopArtists')"
+        >
+          Top Artists
+        </button>
+      </div>
+      <div class="pt-2 ">
+        <button
+          class="focus:outline-none focus:underline focus:text-gray-300"
+          @click="changeCurrentScreen('TopTracks')"
+        >
+          Top Tracks
+        </button>
+      </div>
     </div>
-    <div class="pt-4">
-      <button @click="changeCurrentScreen('TopArtists')">Top Artists</button>
+    <hr class="border-gray-700 my-4" />
+    <div>
+      <div class="text-2xl underline text-gray-400">
+        Playlists
+      </div>
+      <div class="pt-2" v-for="playlist in playlists" :key="playlist.id">
+        {{ playlist.name }}
+      </div>
     </div>
-    <div class="pt-4">
-      <button @click="changeCurrentScreen('TopTracks')">Top Tracks</button>
+    <div class="absolute bottom-0 pb-4">
+      <button
+        class="focus:outline-none focus:underline focus:text-gray-300"
+        @click="logout()"
+      >
+        Logout
+      </button>
     </div>
-  </div>
-  <hr class="border-gray-700 mt-4" />
-  <div class="pt-8 text-2xl underline text-gray-400">
-    Playlists
-  </div>
-  <div class="pt-2" v-for="playlist in playlists" :key="playlist.id">
-    {{ playlist.name }}
   </div>
 </template>
 
 <script lang="ts">
+import { logout } from "@/utils/cookiesUtils";
 import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 
@@ -36,7 +60,7 @@ export default defineComponent({
       store.commit("setCurrentMainScreen", screen);
     };
 
-    return { playlists, changeCurrentScreen };
+    return { playlists, changeCurrentScreen, logout };
   }
 });
 </script>

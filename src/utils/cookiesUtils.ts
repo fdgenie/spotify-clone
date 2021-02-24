@@ -27,20 +27,16 @@ export const getDateNowToken = () => {
 };
 
 export const hasTokenExpired = () => {
-  console.log(Date.now() - Number(getDateNowToken()));
   return Date.now() - Number(getDateNowToken()) > 3600 * 1000;
 };
 
-export const refreshToken = () => {
-  if (getRefreshToken()) {
-    document.cookie = `date_now=${Date.now()}`;
-  } else {
-    document.cookie = `access_token=;`;
-    document.cookie = `refresh_token=;`;
-    document.cookie = `expires_in=;`;
-  }
+export const logout = () => {
+  console.log("test");
+  document.cookie = `access_token=;`;
+  document.cookie = `refresh_token=;`;
+  document.cookie = `expires_in=;`;
+  document.cookie = `date_now=;`;
+  window.location.href = process.env.VUE_APP_REDIRECT_URI;
 };
-
-//TODO delete cookie to change user
 
 //TODO logout

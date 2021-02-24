@@ -1,10 +1,10 @@
 import {
   getAccessToken,
   hasTokenExpired,
-  refreshToken,
   getRefreshToken
 } from "@/utils/cookiesUtils";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import store from "../store/index";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
   if (getAccessToken() && !hasTokenExpired()) {
     next();
   } else if (getRefreshToken()) {
-    refreshToken();
+    store.dispatch("dispathRefreshToken");
   } else if (to.path !== "/login") {
     next("/login");
   } else {

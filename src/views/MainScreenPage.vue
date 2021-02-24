@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen grid grid-cols-12">
+  <div class="font-sans h-screen grid grid-cols-12 ">
     <aside
       class="relative md:col-span-2 col-span-4 bg-black text-white text-left px-4"
     >
