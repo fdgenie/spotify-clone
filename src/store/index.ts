@@ -14,7 +14,12 @@ export default createStore({
     playlists: [],
     currentTrack: false,
     currentMainScreen: "Home",
-    loading: false
+    loading: false,
+    artistInfo: {
+      info: {},
+      topTracks: {},
+      relatedArtists: {}
+    }
   },
   getters: {
     getRecentlyPlayed: state => {
@@ -40,6 +45,9 @@ export default createStore({
     },
     getLoading: state => {
       return state.loading;
+    },
+    getArtistInfo: state => {
+      return state.artistInfo;
     }
   },
   mutations: {
@@ -66,6 +74,15 @@ export default createStore({
     },
     setLoading(state, data) {
       state.loading = data;
+    },
+    setArtistInfo(state, data) {
+      state.artistInfo.info = data;
+    },
+    setArtistTopTracks(state, data) {
+      state.artistInfo.topTracks = data;
+    },
+    setArtistRelatedArtists(state, data) {
+      state.artistInfo.relatedArtists = data;
     }
   },
   actions: {
@@ -104,7 +121,6 @@ export default createStore({
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {
-            console.log(error);
             return;
           }
           throw error;
@@ -124,7 +140,6 @@ export default createStore({
         })
       })
         .then(response => {
-          console.log(response);
           document.cookie = `access_token=${response.data.access_token}; path=/`;
           document.cookie = `expires_in=${response.data.expires_in};  path=/`;
           document.cookie = `refresh_token=${getRefreshToken()};  path=/`;
@@ -133,7 +148,6 @@ export default createStore({
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {
-            console.log(error);
             return;
           }
           throw error;
@@ -232,13 +246,62 @@ export default createStore({
 
       axiosInstance({
         method: "get",
-        url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}`,
+        url: `me/top/tracks?limit=${limit}`,
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })
         .then(response => {
           commit("setTopTracks", response.data.items);
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 422) {
+            return;
+          }
+          throw error;
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
+    },
+    artistTopTracks({ commit }, { artistId }) {
+      // commit("setLoading", true);
+
+      axiosInstance({
+        method: "get",
+        url: `artists/${artistId}/top-tracks`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        },
+        params: {
+          market: "from_token"
+        }
+      })
+        .then(response => {
+          commit("setArtistTopTracks", response.data.tracks);
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 422) {
+            return;
+          }
+          throw error;
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
+    },
+    artistRelatedArists({ commit }, { artistId }) {
+      // commit("setLoading", true);
+
+      axiosInstance({
+        method: "get",
+        url: `artists/${artistId}/related-artists`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
+        .then(response => {
+          commit("setArtistRelatedArtists", response.data.artists.slice(0, 6));
         })
         .catch(error => {
           if (error.response && error.response.status === 422) {

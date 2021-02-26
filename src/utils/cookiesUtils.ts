@@ -31,7 +31,6 @@ export const hasTokenExpired = () => {
 };
 
 export const logout = () => {
-  console.log("test");
   document.cookie = `access_token=;`;
   document.cookie = `refresh_token=;`;
   document.cookie = `expires_in=;`;

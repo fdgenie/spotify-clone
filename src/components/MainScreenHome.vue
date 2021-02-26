@@ -12,7 +12,10 @@
         :key="topArtist.id"
         class="text-left mr-5 mt-5 text-white w-100"
       >
-        <div class="box-border p-2">
+        <div
+          @click="openModal(topArtist)"
+          class="box-border p-2 cursor-pointer"
+        >
           <div class="mb-2 col-span-1">
             <img
               class="w-40 rounded-full h-40 m-auto"
@@ -91,16 +94,27 @@
       <img src="@/assets/loading_spinner.png" alt="" />
     </div>
   </div>
+  <TopArtistsDialog
+    v-if="isDialogOpen"
+    :topArtist="topArtistPick"
+    v-model:useStore="isDialogOpen"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
+import TopArtistsDialog from "@/components/TopArtistsDialog.vue";
 
 export default defineComponent({
   name: "MainScreenHome",
+  components: {
+    TopArtistsDialog
+  },
   setup() {
     const store = useStore();
+    const isDialogOpen = ref(false);
+    const topArtistPick = ref(false);
 
     store.dispatch("recentlyPlayed");
     store.dispatch("topArtists", { limit: 6 });
@@ -126,7 +140,21 @@ export default defineComponent({
       store.commit("setCurrentTrack", track);
     };
 
-    return { recentlyPlayed, topArtists, topTracks, playSong, loading };
+    return {
+      recentlyPlayed,
+      topArtists,
+      topTracks,
+      playSong,
+      loading,
+      isDialogOpen,
+      topArtistPick
+    };
+  },
+  methods: {
+    openModal(artist: any) {
+      this.topArtistPick = artist;
+      this.isDialogOpen = true;
+    }
   }
 });
 </script>
